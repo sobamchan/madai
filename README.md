@@ -14,6 +14,8 @@ pip install madai
 
 ## Usage
 
+Two target corpus need to be text files, each line containing one document/sentence.
+
 ```
 madai /path/to/corpus/a /path/to/corpus/b
 ```
