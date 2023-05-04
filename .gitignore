@@ -1,0 +1,5 @@
+__pycache__
+!.gitkeep
+.DS_Store
+.mypy_cache
+dist
