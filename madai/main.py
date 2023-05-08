@@ -1,11 +1,11 @@
 from argparse import ArgumentParser
 from collections import Counter
 from dataclasses import dataclass, field
+import typer
 from functools import partial
 from random import sample
 from typing import Union
 
-import click
 import numpy as np
 import scipy.stats as stats
 import sienna
@@ -132,22 +132,17 @@ def _run(
     return np.array(scores)
 
 
-@click.command()
-@click.argument("a", type=str)
-@click.argument("b", type=str)
-@click.option("--lang", type=str, default="en")
-@click.option("--slice-size", type=float, default=0.25)
-@click.option("--n-iter", type=int, default=50)
-@click.option("--top-n", type=int, default=1000)
-@click.option("--remove-stopwords", is_flag=True, show_default=True, default=False)
+app = typer.Typer()
+
+@app.command()
 def run(
     a: str,
     b: str,
-    lang: str,
-    slice_size: float,
-    n_iter: int,
-    top_n: int,
-    remove_stopwords: bool,
+    lang: str = "en",
+    slice_size: float = 0.25,
+    n_iter: int = 50,
+    top_n: int = 1000,
+    remove_stopwords: bool = False,
 ):
     if remove_stopwords:
         assert lang == "en", "Stopword remove is only supported for English (en)"
