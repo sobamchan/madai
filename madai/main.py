@@ -72,8 +72,12 @@ def _run(
     a = a[:doc_n]
     b = b[:doc_n]
 
+    print(f"Use {doc_n} documents for each corpus.")
+
     # Number of sample for each slice
     slice_size = slice_size if isinstance(slice_size, int) else int(doc_n * slice_size)
+
+    print(f"Slice size: {slice_size}")
 
     # Tokenization for freq word counting
     tokenizer = partial(tokenize, tok, remove_stopwords)
