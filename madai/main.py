@@ -116,18 +116,8 @@ def _run(
         assert isinstance(sub_a[0], str)
         assert isinstance(sub_b[0], str)
 
-        a_words = [
-            word.text.lower()
-            for doc in sub_a
-            for word in tok(doc)
-            if word.text.lower() not in stopwords
-        ]
-        b_words = [
-            word.text.lower()
-            for doc in sub_b
-            for word in tok(doc)
-            if word.text.lower() not in stopwords
-        ]
+        a_words = [word for doc in a for word in tokenizer(doc)]
+        b_words = [word for doc in b for word in tokenizer(doc)]
 
         a_fc.load_words(a_words)
         b_fc.load_words(b_words)
