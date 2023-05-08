@@ -67,10 +67,13 @@ def _run(
     n_iter: int = 5,
     remove_stopwords: bool = False,
 ) -> np.ndarray:
-    # Tokenize corpus
+
     a_doc_n = len(a)
     b_doc_n = len(b)
+
     doc_n = min(a_doc_n, b_doc_n)
+    a = a[:doc_n]
+    b = b[:doc_n]
 
     # Number of sample for each slice
     slice_size = slice_size if isinstance(slice_size, int) else int(doc_n * slice_size)
@@ -102,13 +105,13 @@ def _run(
     b_fc = FreqCounter(seed_words=freq_words)
 
     # Split corpus into slices
-    a_sliices = [a[i : i + slice_size] for i in range(0, len(a), slice_size)]
-    b_sliices = [b[i : i + slice_size] for i in range(0, len(b), slice_size)]
+    a_sliices = [a[i : i + slice_size] for i in range(0, doc_n, slice_size)]
+    b_sliices = [b[i : i + slice_size] for i in range(0, doc_n, slice_size)]
 
     # A list of scores, further taken avg, std
     scores: list[float] = []
 
-    # A number of slices to be used for each iter
+    # A number of slices to be used for each iter (50% of a corpus)
     n_slices_to_sample = min(len(a_sliices), len(b_sliices)) // 2
 
     for _ in tqdm(range(n_iter), total=n_iter):
