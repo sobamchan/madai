@@ -145,7 +145,7 @@ def _run(
 @click.option("--slice-size", type=float, default=0.25)
 @click.option("--n-iter", type=int, default=50)
 @click.option("--top-n", type=int, default=1000)
-@click.option("--remove-stopwords", is_flag=True)
+@click.option("--remove-stopwords", is_flag=True, show_default=True, default=False)
 def run(
     a: str,
     b: str,

@@ -42,6 +42,10 @@ def get_tokenizer(lang: str) -> Tokenizer:
 
 def tokenize(tok: Tokenizer, remove_stopwords: bool, text: str) -> List[str]:
     if remove_stopwords:
-        return [word for word in tok(text) if word.text.lower() not in stopwords]
+        return [
+            word.text.lower()
+            for word in tok(text)
+            if word.text.lower() not in stopwords
+        ]
     else:
-        return [word for word in tok(text)]
+        return [word.text.lower() for word in tok(text)]
