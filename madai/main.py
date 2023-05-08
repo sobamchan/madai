@@ -1,6 +1,7 @@
 from argparse import ArgumentParser
 from collections import Counter
 from dataclasses import dataclass, field
+from functools import partial
 from random import sample
 from typing import Union
 
@@ -8,13 +9,10 @@ import click
 import numpy as np
 import scipy.stats as stats
 import sienna
-from nltk.corpus import stopwords
 from spacy.tokenizer import Tokenizer
 from tqdm import tqdm
 
-from madai.utils import get_tokenizer
-
-stopwords = stopwords.words("english")
+from madai.utils import get_tokenizer, tokenize
 
 
 @dataclass
@@ -67,7 +65,6 @@ def _run(
     n_iter: int = 5,
     remove_stopwords: bool = False,
 ) -> np.ndarray:
-
     a_doc_n = len(a)
     b_doc_n = len(b)
 
@@ -79,18 +76,9 @@ def _run(
     slice_size = slice_size if isinstance(slice_size, int) else int(doc_n * slice_size)
 
     # Tokenization for freq word counting
-    a_words = [
-        word.text.lower()
-        for doc in a
-        for word in tok(doc)
-        if remove_stopwords and (word.text.lower() not in stopwords)
-    ]
-    b_words = [
-        word.text.lower()
-        for doc in b
-        for word in tok(doc)
-        if remove_stopwords and (word.text.lower() not in stopwords)
-    ]
+    tokenizer = partial(tokenize, tok, remove_stopwords)
+    a_words = [word for doc in a for word in tokenizer(doc)]
+    b_words = [word for doc in b for word in tokenizer(doc)]
 
     assert isinstance(a_words, list)
     assert isinstance(a_words[0], str)

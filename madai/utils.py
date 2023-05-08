@@ -1,3 +1,6 @@
+from typing import List
+
+from nltk.corpus import stopwords
 from spacy.lang.ar import Arabic
 from spacy.lang.bg import Bulgarian
 from spacy.lang.de import German
@@ -13,6 +16,8 @@ from spacy.lang.ur import Urdu
 from spacy.lang.vi import Vietnamese
 from spacy.lang.zh import Chinese
 from spacy.tokenizer import Tokenizer
+
+stopwords = stopwords.words("english")
 
 
 def get_tokenizer(lang: str) -> Tokenizer:
@@ -33,3 +38,10 @@ def get_tokenizer(lang: str) -> Tokenizer:
         "zh": Chinese(),
     }[lang]
     return nlp.tokenizer
+
+
+def tokenize(tok: Tokenizer, remove_stopwords: bool, text: str) -> List[str]:
+    if remove_stopwords:
+        return [word for word in tok(text) if word.text.lower() not in stopwords]
+    else:
+        return [word for word in tok(text)]
