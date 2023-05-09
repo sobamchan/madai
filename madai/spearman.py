@@ -29,7 +29,7 @@ class Corpus:
         ]
 
     def sample_docs(self) -> list[list[str]]:
-        sampled_slices = sample(self.slices, self.doc_n // 2)
+        sampled_slices = sample(self.slices, k=len(self.slices) // 2)
         return [doc for slice in sampled_slices for doc in slice]
 
     def sample_words(self) -> list[str]:
