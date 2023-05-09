@@ -1,7 +1,5 @@
-from argparse import ArgumentParser
 from collections import Counter
 from dataclasses import dataclass, field
-import typer
 from functools import partial
 from random import sample
 from typing import Union
@@ -9,6 +7,7 @@ from typing import Union
 import numpy as np
 import scipy.stats as stats
 import sienna
+import typer
 from spacy.tokenizer import Tokenizer
 from tqdm import tqdm
 
@@ -76,6 +75,7 @@ def _run(
 
     # Number of sample for each slice
     slice_size = slice_size if isinstance(slice_size, int) else int(doc_n * slice_size)
+    slice_size = max(1, slice_size)
 
     print(f"Slice size: {slice_size}")
 
@@ -134,14 +134,17 @@ def _run(
 
 app = typer.Typer()
 
+
 @app.command()
-def run(
-    a: str,
-    b: str,
-    lang: str = "en",
-    slice_size: float = 0.25,
-    n_iter: int = 50,
-    top_n: int = 1000,
+def chi2(
+    a: str = typer.Argument(..., help="Path to a corpus"),
+    b: str = typer.Argument(..., help="Path to another corpus"),
+    lang: str = typer.Option("en", help="Language code for both corpus."),
+    slice_size: float = typer.Option(0.25, help="Size of each slice."),
+    iter_n: int = typer.Option(50, help="Number of iteration to take avg from."),
+    top_n_words: int = typer.Option(
+        500, help="Number of most frequent words to consider."
+    ),
     remove_stopwords: bool = False,
 ):
     if remove_stopwords:
@@ -155,25 +158,9 @@ def run(
 
     tok = get_tokenizer(lang)
 
-    scores = _run(a_texts, b_texts, tok, slice_size, top_n, n_iter, remove_stopwords)
+    scores = _run(
+        a_texts, b_texts, tok, slice_size, top_n_words, iter_n, remove_stopwords
+    )
     score_avg = np.average(scores)
     score_std = np.std(scores)
     print(f"Distance between corpus: {score_avg:.2f}±{score_std:.2f}")
-
-
-if __name__ == "__main__":
-    parser = ArgumentParser()
-    parser.add_argument("-a", type=str, required=True)
-    parser.add_argument("-b", type=str, required=True)
-    args = parser.parse_args()
-
-    a_texts = sienna.load(args.a)
-    b_texts = sienna.load(args.b)
-
-    assert isinstance(a_texts, list)
-    assert isinstance(b_texts, list)
-
-    scores = run(a_texts, b_texts, slice_size=0.25, n_iter=50, top_n=1000)
-    score_avg = np.average(scores)
-    score_std = np.std(scores)
-    print(f"{score_avg:.2f}±{score_std:.2f}")

@@ -1,5 +1,4 @@
-from typing import List
-
+import numpy as np
 from nltk.corpus import stopwords
 from spacy.lang.ar import Arabic
 from spacy.lang.bg import Bulgarian
@@ -40,7 +39,7 @@ def get_tokenizer(lang: str) -> Tokenizer:
     return nlp.tokenizer
 
 
-def tokenize(tok: Tokenizer, remove_stopwords: bool, text: str) -> List[str]:
+def tokenize(tok: Tokenizer, remove_stopwords: bool, text: str) -> list[str]:
     if remove_stopwords:
         return [
             word.text.lower()
@@ -49,3 +48,11 @@ def tokenize(tok: Tokenizer, remove_stopwords: bool, text: str) -> List[str]:
         ]
     else:
         return [word.text.lower() for word in tok(text)]
+
+
+def avg(values: list) -> float:
+    return np.mean(np.array(values))
+
+
+def std(values: list) -> float:
+    return np.std(np.array(values))

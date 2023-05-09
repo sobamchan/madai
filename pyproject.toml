@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "madai"
-version = "0.1.5"
+version = "0.2.0"
 description = ""
 authors = ["sobamchan <oh.sore.sore.soutarou@gmail.com>"]
 readme = "README.md"
@@ -28,4 +28,4 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-madai = "madai.main:app"
+madai = "madai.cli:app"

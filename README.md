@@ -14,10 +14,17 @@ pip install madai
 
 ## Usage
 
+madai implements two ways of computing similarity between two corpus, chi2 and spearman.
+Use spearman when two corpus are different in size.
+
 Two target corpus need to be text files, each line containing one document/sentence.
 
 ```
-madai /path/to/corpus/a /path/to/corpus/b
+madai chi2 /path/to/corpus/a /path/to/corpus/b
+
+# or
+
+madai spearman /path/to/corpus/a /path/to/corpus/b
 ```
 
 To view parameters, run,
