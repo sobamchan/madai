@@ -45,6 +45,7 @@ def sim(a_words: list[str], b_words: list[str], top_n_words: int) -> float:
     assert isinstance(b_ranked_words[0], str)
 
     d = spearmanr(a_ranked_words, b_ranked_words)[0]
+    d = abs(d)
 
     return d
 
